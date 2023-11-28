@@ -1,4 +1,5 @@
 # StarNavi
+
 Social Network: 
 
     This project is a simple REST API for a social network, implemented using the Flask framework. It includes basic models such as User and Post, where each post is created by a user. The main features of the API include user signup, user login, post creation, post like, and post unlike functionalities.
