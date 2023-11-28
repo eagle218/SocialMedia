@@ -1,5 +1,6 @@
 # StarNavi
 Social Network: 
+
     This project is a simple REST API for a social network, implemented using the Flask framework. It includes basic models such as User and Post, where each post is created by a user. The main features of the API include user signup, user login, post creation, post like, and post unlike functionalities.
 
 Additionally, the API offers analytics features, allowing users to retrieve information on the number of likes made within a specified date range. For example, the endpoint /api/analytics/?date_from=2020-02-02&date_to=2020-02-15 returns analytics aggregated by day.
@@ -7,6 +8,7 @@ Additionally, the API offers analytics features, allowing users to retrieve info
 Furthermore, the API provides a user activity endpoint, which displays the user's last login time and the timestamp of their last request to the service. This information can be useful for tracking user engagement and activity within the social network. The implementation leverages the Flask framework along with relevant libraries to achieve these functionalities.
 
 Automated bot:
+
   The automated bot is designed to showcase system functionalities based on predefined rules. These rules are specified in a configuration file, and the bot utilizes the information within this file to simulate user activities. The configuration file includes the following integer fields 
 
 number_of_users: Specifies the total number of users to be signed up.
