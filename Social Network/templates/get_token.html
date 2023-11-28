@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+
+<h1>Your Api KEY</h1>
+<div id="result"></div>
+
+
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+    getToken();
+});
+
+function getToken() {
+    const apiUrl = 'http://localhost:5000/api/get_token';
+    const username = "{{username}}";
+
+    const urlWithParams = new URL(apiUrl);
+    urlWithParams.searchParams.append('username', username);
+
+    fetch(urlWithParams, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        return response.json();
+    })
+    .then(data => {
+        displayResult(data);
+        console.log('Response:', data);
+    })
+    .catch(error => {
+        console.error('Error:', error.message);
+    });
+}
+    function displayResult(data) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `<p>${data.api_key || 'Token received successfully!'}</p>`;
+        }
+</script>
+
+{% endblock %}

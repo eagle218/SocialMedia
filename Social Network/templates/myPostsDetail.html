@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Post Details
+{% endblock %}
+
+{% block main %}
+    <div class="post-container">
+        <h1>My Posts</h1>
+
+        {% if user_posts %}
+            <ul class="post-list">
+                {% for post in user_posts %}
+                    <li>
+                        <textarea id="content" name="content" rows="4" cols="50" required readonly>{{ post.content }}</textarea>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No posts found for this user.</p>
+        {% endif %}
+    </div>
+
+    <style>
+        .post-container {
+            text-align: center;
+        }
+
+        .post-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .post-list li {
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: none;
+        }
+    </style>
+{% endblock %}

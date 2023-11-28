@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+    <h1>Create a New Post</h1>
+
+    <form id="createPostForm">
+        <textarea id="content" name="content" rows="4" cols="50" required></textarea><br>
+
+        <input type="submit" value="Create Post">
+    </form>
+
+    <script>
+        document.getElementById('createPostForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            var api_key = "{{api_key}}"
+            var content = document.getElementById('content').value;
+
+            fetch('/api/post/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'api_key': api_key,
+                },
+                body: JSON.stringify({
+                    content: content,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('Success')
+                
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+
+       
+    </script>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f8f8f8;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-top: 50px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    .post-form {
+        margin-top: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+    }
+
+    textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        resize: none;
+    }
+
+    input[type="submit"] {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,12 @@
+Commands:
+  url: http://127.0.0.1:5000/api
+  users:
+    - username: user1
+      content: "Test content for user 1"
+    - username: user2
+      content: "Test content for user 2"
+    - username: user3
+      content: "Test content for user 3"
+  number_of_users: 3
+  max_posts_per_user: 5
+  max_likes_per_user: 3

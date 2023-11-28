@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+
+<form id="loginForm">
+    <div class="mb-3">
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text" required>
+    </div>
+    <div class="mb-3">
+        <input class="form-control mx-auto w-auto" id="password" name="password" placeholder="Password" type="password" required>
+    </div>
+    <button class="btn btn-primary" type="button" onclick="loginUser()">Login</button>
+  </form>
+  
+    
+<script>
+
+function loginUser() {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    if (!username.trim() || !password.trim()) {
+        alert("Please enter both username and password");
+        return;
+    }
+
+    const data = {
+        "username": username,
+        "password": password
+    };
+
+    fetch('http://127.0.0.1:5000/api/login', {
+        method: 'POST', 
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
+        alert(data.message);
+        if (data.redirect_url) {
+            window.location.href = data.redirect_url;
+        } else {
+            // 
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error.message); 
+        alert(error.message);
+        
+    });
+}
+</script>
+{% endblock %}

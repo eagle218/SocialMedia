@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+  <form id="registrationForm">
+    <div class="mb-3">
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text" required>
+    </div>
+    <div class="mb-3">
+        <input class="form-control mx-auto w-auto" id="password" name="password" placeholder="Password" type="password" required>
+    </div>
+    <div class="mb-3">
+        <input class="form-control mx-auto w-auto" id="confirmation" name="confirmation" placeholder="Password (again)" type="password" required>
+    </div>
+    <button class="btn btn-primary" type="button" onclick="registerUser()">Register</button>
+  </form>
+  
+  <script>
+
+    function registerUser() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const confirmation = document.getElementById("confirmation").value;
+
+        
+        if (!username.trim() || !password.trim()) {
+            alert("Please enter both username and password");
+            return;
+        }
+
+        if (password !== confirmation) {
+            alert("Passwords do not match");
+            return;
+        }
+
+        const data = {
+            "username": username,
+            "password": password
+        };
+
+        fetch('http://127.0.0.1:5000/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            if (data.redirect_url) {
+                window.location.href = data.redirect_url;
+            } else {
+                //
+            }
+
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error during registration');
+        });
+    }
+</script>
+{% endblock %}
+

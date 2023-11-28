@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Post Details
+{% endblock %}
+
+{% block main %}
+
+{% for user, posts in user_posts.items() %}
+    <h2>{{ user.username }}'s Posts</h2>
+    <ul>
+        {% for post in posts %}
+        <textarea id="content" name="content" rows="4" cols="50" required readonly>{{post}}</textarea>
+            <button onclick="likePost('{{ post_ids[loop.index0] }}', '{{ api_key }}')">Like</button>
+        {% endfor %}
+    </ul>
+{% endfor %}
+
+<style>
+   
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+
+    h1 {
+        color: #333;
+        text-align: center;
+    }
+
+    .user-container {
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    .post-container {
+        margin-left: 20px;
+    }
+
+    textarea {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        resize: none;
+        margin-bottom: 10px;
+    }
+</style>
+
+
+<script>
+    function likePost(postId, api_key) {
+        fetch(`/api/post/${postId}/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                post_id: postId,
+                api_key: api_key,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === 'You have already liked this post') {
+                toggleUnlike(postId, api_key)
+            } else {
+                alert('Post liked successfully');
+            }
+        })
+        .catch(error => console.error('Error liking post:', error));
+    }
+
+    
+function toggleUnlike(postId, api_key) {
+    fetch(`/api/post/${postId}/unlike`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            api_key: api_key,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === 'Post unliked successfully') {
+            alert('Post unliked successfully');
+        } else {
+            alert('You have not liked this post');
+        }
+    })
+    .catch(error => console.error('Error unliking post:', error));
+}
+</script>
+
+{% endblock %}
