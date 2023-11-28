@@ -14,34 +14,42 @@
     </form>
 
     <script>
-        document.getElementById('createPostForm').addEventListener('submit', function (event) {
-            event.preventDefault();
+        document.getElementById('createPostForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
 
-            var api_key = "{{api_key}}"
-            var content = document.getElementById('content').value;
+        var url = `http://127.0.0.1:5000/api/post/create`;
+        var content = document.getElementById('content').value;
 
-            fetch('/api/post/create', {
+        const data = {
+            api_key: "{{api_key}}",
+            content: content,
+        };
+
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+
+        try {
+            const response = await fetch(url, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'api_key': api_key,
-                },
-                body: JSON.stringify({
-                    content: content,
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                alert('Success')
-                
-            })
-            .catch((error) => {
-                console.error('Error:', error);
+                headers: headers,
+                body: JSON.stringify(data),
             });
-        });
 
-       
+            if (response.status === 200) {
+                console.log(`Success to create post - ${response}`);
+                const postId = (await response.json()).post_id;
+                alert('Success to create post!');
+
+            } else {
+                throw new Error(`Failed to create post - ${response.status}`);
+            }
+        } catch (error) {
+            console.error(error);
+            throw new Error(`Error during post creation: ${error.message}`);
+        }
+    });
+
     </script>
 <style>
     body {
