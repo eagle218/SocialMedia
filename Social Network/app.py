@@ -32,95 +32,6 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-
-""" TEMPLATES  """
-
-@app.route("/api/")
-def index():
-    if not session.get('user_id'):
-        return render_template('login.html')
-    return render_template('index.html', user_id=session.get('user_id'))
-
-@app.route('/api/register')
-def register():
-    return render_template('register.html')
-
-@app.route('/api/login')
-def login():
-    return render_template('login.html')
-
-@app.route("/logout")
-def logout():
-    """Log user out."""
-
-    session.clear()
-
-    return redirect("/api/login")
-
-
-
-@app.route('/api/post/create')
-def post_creation():
-    if not session.get('user_id'):
-        return render_template('login.html')
-    user_id = session.get('user_id')
-    user = User.query.get(user_id)
-    if user:
-        api_key = user.api_key
-        return render_template('createPost.html', api_key=api_key, user_id=user_id)
-    else:
-        print(f"User with ID {user_id} not found.")
-
-@app.route('/api/post/myPosts')
-def post_detail():
-    user_id = session.get('user_id')
-    if not user_id:
-        return render_template('login.html')
-    
-    user = User.query.get(user_id)
-    if not user:
-        print("User not found")
-        return render_template('login.html')
-    
-    user_posts = Post.query.filter_by(user_id=user.id).all()
-
-    return render_template('myPostsDetail.html', user=user, user_posts=user_posts, user_id = user_id)
-
-@app.route('/api/post/allPosts')
-def all_posts():
-    if not session.get('user_id'):
-        print("not")
-        return render_template('login.html')
-
-    # Retrieve all posts from all users
-    all_posts = Post.query.all()
-
-    # Pass post IDs to the template
-    post_ids = [post.id for post in all_posts]
-
-    # Organize posts by user
-    user_posts = {}
-    for post in all_posts:
-        if post.user not in user_posts:
-            user_posts[post.user] = []
-        user_posts[post.user].append(post.content)  # Assuming post content is in the 'content' attribute
-    
-
-    user_id = session.get('user_id')
-    user = User.query.get(user_id)
-    if user:
-        api_key = user.api_key
-        return render_template('allPosts.html', user_posts=user_posts, api_key=api_key, post_ids=post_ids, user_id=user_id)
-    else:
-        print(f"User with ID {user_id} not found.")
-    
-
-@app.route('/api/token')
-def get_token():
-    user_id = session.get('user_id')
-    user = User.query.get(user_id)
-    return render_template('get_token.html', username=user.username, user_id=user_id)
-
 """  MODELS """
 
 class User(db.Model):
@@ -374,6 +285,96 @@ api.add_resource(AnalyticsResource, '/api/analytics')
 api.add_resource(UserActivity, '/user_activity')
 api.add_resource(GetTokenResource, '/api/get_token')
 
+
+
+
+""" TEMPLATES  """
+
+@app.route("/api/")
+def index():
+    if not session.get('user_id'):
+        return render_template('login.html')
+    return render_template('index.html', user_id=session.get('user_id'))
+
+@app.route('/api/register')
+def register():
+    return render_template('register.html')
+
+@app.route('/api/login')
+def login():
+    return render_template('login.html')
+
+@app.route("/logout")
+def logout():
+    """Log user out."""
+
+    session.clear()
+
+    return redirect("/api/login")
+
+
+
+@app.route('/api/post/create')
+def post_creation():
+    if not session.get('user_id'):
+        return render_template('login.html')
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+    if user:
+        api_key = user.api_key
+        return render_template('createPost.html', api_key=api_key, user_id=user_id)
+    else:
+        print(f"User with ID {user_id} not found.")
+
+@app.route('/api/post/myPosts')
+def post_detail():
+    user_id = session.get('user_id')
+    if not user_id:
+        return render_template('login.html')
+    
+    user = User.query.get(user_id)
+    if not user:
+        print("User not found")
+        return render_template('login.html')
+    
+    user_posts = Post.query.filter_by(user_id=user.id).all()
+
+    return render_template('myPostsDetail.html', user=user, user_posts=user_posts, user_id = user_id)
+
+@app.route('/api/post/allPosts')
+def all_posts():
+    if not session.get('user_id'):
+        print("not")
+        return render_template('login.html')
+
+    # Retrieve all posts from all users
+    all_posts = Post.query.all()
+
+    # Pass post IDs to the template
+    post_ids = [post.id for post in all_posts]
+
+    # Organize posts by user
+    user_posts = {}
+    for post in all_posts:
+        if post.user not in user_posts:
+            user_posts[post.user] = []
+        user_posts[post.user].append(post.content)  # Assuming post content is in the 'content' attribute
+    
+
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+    if user:
+        api_key = user.api_key
+        return render_template('allPosts.html', user_posts=user_posts, api_key=api_key, post_ids=post_ids, user_id=user_id)
+    else:
+        print(f"User with ID {user_id} not found.")
+    
+
+@app.route('/api/token')
+def get_token():
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+    return render_template('get_token.html', username=user.username, user_id=user_id)
 
 
 if __name__ == '__main__':
