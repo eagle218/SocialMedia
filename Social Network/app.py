@@ -25,7 +25,7 @@ CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
-app.config['JWT_SECRET_KEY'] = 'your_secret_key_here'
+app.config['JWT_SECRET_KEY'] = 'secretKey'
 
 
 app.config["SESSION_PERMANENT"] = False
